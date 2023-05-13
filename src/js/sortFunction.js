@@ -8,25 +8,16 @@ export default function orderByProps(obj, arr) {
   const newArr = [...arr];
   const newObj = { ...obj };
   const sortedArr = [];
-  for (let i = 0; i < newArr.length; i += 1) {
-    // eslint-disable-next-line no-unused-vars
-    for (const prop in newObj) {
-      if (newArr[i] in newObj) {
-        const object = {
-          key: newArr[i],
-          value: newObj[newArr[i]],
-        };
-        sortedArr.push(object);
-        delete newObj[newArr[i]];
-        newArr.splice(newArr.indexOf(newArr[i]), 1);
-      }
+  newArr.forEach((key) => {
+    const value = newObj[key];
+    if (!(key in newObj)) {
+      throw new Error('Invalid key name');
     }
-  }
-  const arrayObj = Object.entries(newObj).sort();
-  // eslint-disable-next-line array-callback-return
-  arrayObj.map((el) => {
-    const temp = { key: el[0], value: el[1] };
-    sortedArr.push(temp);
+    sortedArr.push({ key, value });
+    delete newObj[key];
   });
-  return sortedArr;
+  const tempArr = Object.entries(newObj)
+    .sort()
+    .map((el) => ({ key: el[0], value: el[1] }));
+  return sortedArr.concat(tempArr);
 }

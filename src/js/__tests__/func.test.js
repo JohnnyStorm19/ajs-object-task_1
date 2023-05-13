@@ -34,3 +34,11 @@ test('В функцию передан пустой объект', () => {
     orderByProps({}, ['hello']);
   }).toThrow(error);
 });
+test('В функцию передано несуществующее свойство', () => {
+  const error = 'Invalid key name';
+  expect(() => {
+    orderByProps({
+      name: 'мечник', health: 10, level: 2, attack: 80, defence: 40,
+    }, ['name', 'heathl']);
+  }).toThrow(error);
+});
